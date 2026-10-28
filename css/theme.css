@@ -1,0 +1,33 @@
+/* Paleta festiva del Día de Muertos. Cambia los colores aquí. */
+:root {
+  --color-bg: #1a0630;
+  --color-surface: #2b0d4a;
+  --color-surface-alt: #3d1566;
+  --color-text: #fff8ff;
+  --color-text-muted: #e6cff5;
+  --color-border: #7a3fb0;
+  --color-accent: #ff3d8f;      /* rosa mexicano */
+  --color-accent-hover: #ff62a5;
+  --color-orange: #ff8a00;
+  --color-yellow: #ffd23f;
+  --color-turquoise: #2fe0d0;
+  --color-green: #5fdc72;
+  --color-violet: #a56bff;
+  --color-accent-strong: #ffd23f;
+  --color-accent-text: #ffffff;
+  --color-floor-target: rgba(255, 210, 63, .38);
+  --color-floor-blocked: rgba(255, 60, 60, .45);
+  --color-slot: #fff3b0;
+  --color-slot-target: rgba(255, 210, 63, .45);
+  --color-floor-lit-glow: rgba(255, 226, 122, .85);
+  --grad-primary: linear-gradient(120deg, #ff3d8f, #ff8a00);
+  --grad-gold: linear-gradient(120deg, #ffd23f, #ff9a1a);
+  --grad-cool: linear-gradient(120deg, #2fe0d0, #4a8bff);
+  --font-sans: "Poppins", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Georgia", "Palatino Linotype", serif;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 3px 10px rgba(0, 0, 0, .3);
+  --shadow-md: 0 14px 38px rgba(0, 0, 0, .5);
+}

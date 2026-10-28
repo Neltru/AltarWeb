@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Altar de Muertos digital</title>
+  <meta name="description" content="Arma y comparte tu altar de muertos en línea.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body data-title-key="pageTitleHome" data-desc-key="pageDescHome">
+  <div class="landing">
+    <header class="landing__header">
+      <a class="brand" href="index.html" data-i18n="brandHome">Altar de Muertos digital</a>
+      <div class="landing__header-actions">
+        <div class="lang-switch" role="group" data-i18n-attr="aria-label:langLabel" aria-label="Idioma">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
+          <button type="button" data-lang="es" aria-pressed="true" data-i18n-attr="title:langEs" title="Español">ES</button>
+          <button type="button" data-lang="en" aria-pressed="false" data-i18n-attr="title:langEn" title="English">EN</button>
+        </div>
+        <div class="institution-logos" aria-label="Instituciones participantes" data-i18n-attr="aria-label:logosAria">
+          <img src="logo-diti.png" alt="DITI" width="180" height="80">
+          <img src="logo-ut.webp" alt="Universidad Tecnológica" width="180" height="80">
+        </div>
+      </div>
+    </header>
+
+    <main class="hero">
+      <section>
+        <span class="hero__eyebrow" data-i18n="heroEyebrow">Día de Muertos</span>
+        <h1 class="hero__title" data-i18n="heroTitle">Altar de Muertos digital</h1>
+        <p class="hero__text" data-i18n="heroText">
+          Arma una ofrenda de siete niveles para recordar a quienes ya no están.
+          Arrastra flores, velas, pan de muerto, fotos y recuerdos; consulta la guía de cada nivel,
+          descarga tu altar como imagen o compártelo con tu familia.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="editor.html" data-i18n="heroCta">Crear mi altar</a>
+        </div>
+      </section>
+
+      <section class="preview" aria-label="Vista previa del altar" data-i18n-attr="aria-label:previewAria">
+        <div class="preview__host stage-host" id="preview"></div>
+        <p class="preview__caption" data-i18n="previewCaption">Así puede quedar tu ofrenda de siete niveles</p>
+      </section>
+    </main>
+
+    <footer class="landing__footer" data-i18n="footer">Altar de Muertos digital · Hecho con cariño para recordar a quienes ya no están.</footer>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/placeholders.js"></script>
+  <script src="js/art-religion.js"></script>
+  <script src="js/art-luz-flores.js"></script>
+  <script src="js/art-comida.js"></script>
+  <script src="js/art-recuerdos.js"></script>
+  <script src="js/art-escenario.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/altar-core.js"></script>
+  <script src="js/altar-stage.js"></script>
+  <script>
+    // Altar de ejemplo para la vista previa: un valor por espacio (null = vacío),
+    // empezando por el piso de abajo.
+    const SAMPLE = [
+      ['calaveritaRosa', 'guitarra', 'fotoFamilia', 'sombrero', 'calavera', 'reloj', 'libros', 'xolo', 'calaveritaAmarilla'],
+      ['panClasico', 'cafe', 'frutaCanasta', 'tamales', 'mole', 'chocolate', 'panAzucar', 'refrescoCola'],
+      ['macetaCempasuchil', 'cempasuchil', 'petalos', 'papelFlores', 'ramoMixto', 'terciopelo', 'macetaMixta'],
+      ['veladora', 'vela', 'copal', 'farol', 'incienso', 'velaColores'],
+      ['vasoAgua', 'sal', 'espejo', 'jarraAgua', 'cruzSal'],
+      ['cruzFlores', 'santo', 'vela'],
+      ['vela', 'retrato', 'virgen'],
+    ];
+    const preview = AltarStage.create(document.getElementById('preview'));
+    // Manteles de ejemplo por piso (ids de `tablecloths`, null = sin mantel).
+    const SAMPLE_CLOTHS = [null, null, null, null, null, null, null];
+    // Papel picado colgante de ejemplo (lugar → tipo, de `garlandSpots` y `garlands`).
+    const SAMPLE_GARLANDS = { izquierda: 'clasico', derecha: 'banderines' };
+    preview.render(AltarCore.deserialize({ s: SAMPLE, c: SAMPLE_CLOTHS, g: SAMPLE_GARLANDS }));
+    I18N.applyStatic();
+    I18N.onChange(() => preview.relabel());
+  </script>
+</body>
+</html>
