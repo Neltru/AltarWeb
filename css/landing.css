@@ -23,7 +23,8 @@
 .landing__header-actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
 .brand { font: 700 20px var(--font-display); font-style: italic; color: #ffe27a; text-decoration: none; text-shadow: 0 2px 8px rgba(255, 138, 0, .5); }
 .institution-logos { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
-.institution-logos img { display: block; width: auto; height: 48px; max-width: min(22vw, 180px); object-fit: contain; }
+.institution-logos img { display: block; width: auto; height: 48px; max-width: min(40vw, 240px); object-fit: contain; }
+.institution-logos .logo-ut { height: 64px; max-width: min(45vw, 320px); }
 .hero {
   flex: 1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 48px;
   max-width: 1240px; width: 100%; margin: 0 auto; padding: 24px 32px 56px;
@@ -102,7 +103,8 @@
 @media (max-width: 900px) {
   .landing__header, .landing__footer { padding-left: 16px; padding-right: 16px; }
   .institution-logos { gap: 10px; }
-  .institution-logos img { height: 40px; max-width: 24vw; }
+  .institution-logos img { height: 40px; max-width: 40vw; }
+  .institution-logos .logo-ut { height: 50px; max-width: 45vw; }
   .hero { grid-template-columns: 1fr; gap: 28px; padding: 12px 16px 40px; }
   .hero__text { font-size: 16px; }
   .credits { padding: 0 16px 40px; }

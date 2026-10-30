@@ -16,7 +16,8 @@
 .topbar__brand { display: inline-flex; align-items: center; gap: 6px; color: #ffe27a; text-decoration: none; font: 700 18px var(--font-display); font-style: italic; white-space: nowrap; }
 .topbar__brand svg { width: 20px; height: 20px; color: var(--color-orange); }
 .institution-logos--editor { display: flex; align-items: center; flex: none; gap: 8px; }
-.institution-logos--editor img { display: block; width: auto; height: 36px; max-width: 100px; object-fit: contain; }
+.institution-logos--editor img { display: block; width: auto; height: 36px; max-width: 180px; object-fit: contain; }
+.institution-logos--editor .logo-ut { height: 46px; max-width: 230px; }
 .toolbar { margin-left: auto; display: flex; align-items: center; gap: 8px; min-width: 0; overflow-x: auto; padding: 6px 4px 10px; scrollbar-width: none; }
 .toolbar::-webkit-scrollbar { display: none; }
 .toolbar__sep { width: 2px; height: 26px; background: rgba(255, 255, 255, .2); margin: 0 4px; flex: none; border-radius: 1px; }
@@ -263,7 +264,8 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; }
 /* ---------- Versión móvil ---------- */
 @media (max-width: 767px) {
   .institution-logos--editor { gap: 4px; }
-  .institution-logos--editor img { height: 28px; max-width: 64px; }
+  .institution-logos--editor img { height: 28px; max-width: 120px; }
+  .institution-logos--editor .logo-ut { height: 32px; max-width: 150px; }
   .topbar { height: 60px; padding: 0 10px; gap: 8px; }
   .topbar__brand span { display: none; }
   .toolbar { gap: 6px; }

@@ -266,7 +266,7 @@ window.AltarCore = (function (CFG) {
   }
 
   // Construye un SVG autónomo del altar (para "Descargar imagen").
-  // `logos`: [{ href (data URL), width, height }] que se dibujan en las esquinas superiores.
+  // `logos`: [{ href (data URL), width, height, scale? }] que se dibujan en las esquinas superiores.
   function toSVG(state, logos = []) {
     const PHs = window.AltarPlaceholders;
     const { width: W, height: H } = CFG.stage;
@@ -310,12 +310,14 @@ window.AltarCore = (function (CFG) {
       out += `<text x="${W / 2}" y="${H - 6}" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="20" fill="#ffe27a" stroke="#3a0d4a" stroke-width="4" paint-order="stroke">${window.I18N.t('memoryOf', { name: safe })}</text>`;
     }
     // Logos institucionales: el primero a la izquierda, el segundo a la derecha.
-    // Misma área para todos, así un logo ancho no se ve más grande que uno cuadrado.
+    // Misma área para todos (así un logo ancho no se ve más grande que uno cuadrado),
+    // multiplicada por `scale` si el logo la define.
     const LOGO_AREA = 80 * 80, LOGO_M = 20;
     logos.slice(0, 2).forEach((l, i) => {
       const r = l.width / l.height;
-      const w = Math.sqrt(LOGO_AREA * r);
-      const h = Math.sqrt(LOGO_AREA / r);
+      const s = l.scale || 1;
+      const w = Math.sqrt(LOGO_AREA * r) * s;
+      const h = Math.sqrt(LOGO_AREA / r) * s;
       const x = i === 0 ? LOGO_M : W - LOGO_M - w;
       out += `<image x="${x.toFixed(1)}" y="${LOGO_M}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" href="${l.href}" preserveAspectRatio="xMidYMid meet"/>`;
     });
