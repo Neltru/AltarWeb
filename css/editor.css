@@ -246,6 +246,9 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; }
 .field > span { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #ffd0f2; }
 .field small { display: block; margin-top: 6px; font-size: 12px; color: var(--color-text-muted); }
 .field input[type="text"] { width: 100%; height: 44px; padding: 0 14px; border-radius: 14px; border: 2px solid #8a4fc0; background: #220a3c; color: #fff; font: 500 16px var(--font-sans); }
+.field input[type="date"] { width: 100%; height: 44px; padding: 0 12px; border-radius: 14px; border: 2px solid #8a4fc0; background: #220a3c; color: #fff; color-scheme: dark; font: 500 15px var(--font-sans); }
+.loved__dates { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+@media (max-width: 420px) { .loved__dates { grid-template-columns: 1fr; } }
 .field input:focus { outline: none; border-color: var(--color-yellow); }
 .loved__photo { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .loved__preview {

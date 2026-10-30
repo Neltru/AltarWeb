@@ -115,8 +115,8 @@ window.ALTAR_CONFIG = (function (PH) {
 
   const catalog = [
     /* ---- Religiosos y tradicionales ---- */
-    I('retrato', 'Imagen del difunto', 'religiosos', PH.retrato, 92, [1],
-      'Es el centro de la ofrenda: la persona a quien se recuerda. Su rostro la invita a regresar a casa. Puedes poner su nombre y su foto con el botón “Mi ser querido”.', { dynamic: true }),
+    I('retrato', 'Imagen del difunto', 'religiosos', PH.retrato, 160, [1],
+      'Es el centro de la ofrenda: la persona a quien se recuerda. Su rostro la invita a regresar a casa. Puedes poner su nombre y su foto con el botón “Mi ser querido”.', { dynamic: true, maxWidth: 116 }),
     I('santo', 'Imagen de un santo', 'religiosos', PH.santo, 86, [1, 2],
       'Representa la devoción de la familia. Se pide a los santos que protejan y acompañen el viaje de las almas.'),
     I('virgen', 'Imagen de la Virgen', 'religiosos', PH.virgen, 86, [1],
@@ -253,9 +253,9 @@ window.ALTAR_CONFIG = (function (PH) {
       'Un brindis simbólico por quien disfrutaba compartir una cerveza.'),
 
     /* ---- Recuerdos y objetos personales ---- */
-    I('fotoDifunto', 'Fotografía del difunto', 'recuerdos', PH.fotoDifunto, 76, [7, 1],
+    I('fotoDifunto', 'Fotografía del difunto', 'recuerdos', PH.fotoDifunto, 94, [7, 1],
       'Más fotos del ser querido en distintas etapas de su vida. Usa la foto que cargaste en “Mi ser querido”.', { dynamic: true }),
-    I('fotoGrande', 'Fotografía grande del difunto', 'recuerdos', PH.fotoGrande, 118, [7, 1],
+    I('fotoGrande', 'Fotografía grande del difunto', 'recuerdos', PH.fotoGrande, 136, [7, 1],
       'Una fotografía de mayor tamaño del ser querido, para que presida la ofrenda. Usa el nombre y la foto que cargaste en “Mi ser querido”.', { dynamic: true }),
     I('fotoFamilia', 'Fotografía familiar', 'recuerdos', PH.fotoFamilia, 76, [7],
       'Una foto familiar recuerda que el difunto sigue formando parte de la familia.', { dynamic: true }),

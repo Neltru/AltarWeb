@@ -649,7 +649,8 @@
   });
 
   $('btn-download').addEventListener('click', async () => {
-    const svg = Core.toSVG(state);
+    // Logos DITI y UT incrustados en js/logos.js (funcionan aun abriendo el archivo local).
+    const svg = Core.toSVG(state, window.ALTAR_LOGOS || []);
     try {
       const png = await svgToPng(svg, 1.5);
       downloadBlob(png, 'mi-altar.png');
@@ -710,7 +711,12 @@
   function loadLoved() {
     try {
       const d = JSON.parse(localStorage.getItem(LOVED_KEY) || 'null');
-      if (d) { PH.deceased.name = d.name || ''; PH.deceased.photo = d.photo || ''; }
+      if (d) {
+        PH.deceased.name = d.name || '';
+        PH.deceased.photo = d.photo || '';
+        PH.deceased.birth = d.birth || '';
+        PH.deceased.death = d.death || '';
+      }
     } catch { /* sin almacenamiento */ }
   }
   function paintLovedPreview() {
@@ -720,6 +726,8 @@
   }
   $('btn-loved').addEventListener('click', () => {
     $('loved-name').value = PH.deceased.name;
+    $('loved-birth').value = PH.deceased.birth;
+    $('loved-death').value = PH.deceased.death;
     lovedPhoto = PH.deceased.photo;
     paintLovedPreview();
     openModal('loved-modal');
@@ -750,6 +758,8 @@
   });
   $('loved-save').addEventListener('click', () => {
     PH.deceased.name = $('loved-name').value.trim();
+    PH.deceased.birth = $('loved-birth').value;
+    PH.deceased.death = $('loved-death').value;
     PH.deceased.photo = lovedPhoto;
     try { localStorage.setItem(LOVED_KEY, JSON.stringify(PH.deceased)); } catch { toast(T('lovedTooBig')); }
     stage.refreshArt();

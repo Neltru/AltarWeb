@@ -79,7 +79,8 @@ window.AltarCore = (function (CFG) {
       if (!it) return;
       const e = getEntry(it.type);
       const s = slotRect(i, k);
-      const scale = Math.min(1, (s.width - CFG.layout.slotGap) / e.width);
+      // `maxWidth` en el catálogo permite que un objeto sobresalga un poco de su espacio.
+      const scale = Math.min(1, (e.maxWidth ?? s.width - CFG.layout.slotGap) / e.width);
       const w = e.width * scale;
       const h = e.height * scale;
       out.push({ ...it, slot: k, x: s.cx - w / 2, y: s.top - h, w, h });
@@ -265,7 +266,8 @@ window.AltarCore = (function (CFG) {
   }
 
   // Construye un SVG autónomo del altar (para "Descargar imagen").
-  function toSVG(state) {
+  // `logos`: [{ href (data URL), width, height }] que se dibujan en las esquinas superiores.
+  function toSVG(state, logos = []) {
     const PHs = window.AltarPlaceholders;
     const { width: W, height: H } = CFG.stage;
     let out = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
@@ -307,6 +309,16 @@ window.AltarCore = (function (CFG) {
       const safe = name.replace(/[&<>"']/g, '');
       out += `<text x="${W / 2}" y="${H - 6}" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="20" fill="#ffe27a" stroke="#3a0d4a" stroke-width="4" paint-order="stroke">${window.I18N.t('memoryOf', { name: safe })}</text>`;
     }
+    // Logos institucionales: el primero a la izquierda, el segundo a la derecha.
+    // Misma área para todos, así un logo ancho no se ve más grande que uno cuadrado.
+    const LOGO_AREA = 80 * 80, LOGO_M = 20;
+    logos.slice(0, 2).forEach((l, i) => {
+      const r = l.width / l.height;
+      const w = Math.sqrt(LOGO_AREA * r);
+      const h = Math.sqrt(LOGO_AREA / r);
+      const x = i === 0 ? LOGO_M : W - LOGO_M - w;
+      out += `<image x="${x.toFixed(1)}" y="${LOGO_M}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" href="${l.href}" preserveAspectRatio="xMidYMid meet"/>`;
+    });
     return out + '</svg>';
   }
 

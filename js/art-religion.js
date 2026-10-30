@@ -6,7 +6,13 @@
 
   // Datos del difunto (nombre y foto). Los modifica el botón "Mi ser querido"
   // de js/editor.js; los retratos del altar se redibujan al cambiarlos.
-  PH.deceased = { name: '', photo: '' };
+  PH.deceased = { name: '', photo: '', birth: '', death: '' };
+  // Fecha "AAAA-MM-DD" del formulario → "DD/MM/AAAA" (o "MM/DD/YYYY" en inglés).
+  const fmtDate = (iso) => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+    if (!m) return '';
+    return window.I18N && window.I18N.lang === 'en' ? `${m[2]}/${m[3]}/${m[1]}` : `${m[3]}/${m[2]}/${m[1]}`;
+  };
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const FONT = 'Georgia,\'Times New Roman\',serif';
 
@@ -33,10 +39,10 @@
   // Marco rectangular de fotografía (60 × 76) con interior personalizable.
   const photoFrame = (k, c1, c2, inner, id) => `
     <rect class="o" x="3" y="3" width="54" height="68" rx="6" fill="${k.g(c1, c2)}"/>
-    <rect class="ot" x="9" y="9" width="42" height="56" rx="3" fill="${k.g('#fff4cf', '#f0c987')}"/>
-    <clipPath id="${id}"><rect x="9" y="9" width="42" height="56" rx="3"/></clipPath>
+    <rect class="ot" x="6" y="6" width="48" height="62" rx="3" fill="${k.g('#fff4cf', '#f0c987')}"/>
+    <clipPath id="${id}"><rect x="6" y="6" width="48" height="62" rx="3"/></clipPath>
     <g clip-path="url(#${id})">${inner}</g>
-    <rect class="ln" x="9" y="9" width="42" height="56" rx="3"/>
+    <rect class="ln" x="6" y="6" width="48" height="62" rx="3"/>
     <path class="sh" d="M7 8 H30 L7 30Z" opacity=".25"/>`;
 
   // Fotografía del difunto: la foto real si el usuario la cargó, o una silueta.
@@ -93,39 +99,60 @@
   Object.assign(PH, {
     /* ------------------------------------------------------------ retratos */
     // Imagen principal del difunto (marco dorado con placa de nombre).
-    retrato: make('0 0 70 94', (k) => {
-      const name = esc((PH.deceased.name || (window.I18N ? window.I18N.t('lovedDefault') : 'Mi ser querido')).slice(0, 26));
-      const fs = name.length > 16 ? 6 : name.length > 11 ? 7.4 : 9;
+    // Placa: nombre (1 o 2 renglones) y, debajo, nacimiento (★) y fallecimiento (✝).
+    // La placa (106 de ancho) es más ancha que el marco (74) para que el texto luzca.
+    retrato: make('0 0 110 152', (k) => {
+      const raw = (PH.deceased.name || (window.I18N ? window.I18N.t('lovedDefault') : 'Mi ser querido')).trim().slice(0, 34);
+      // Los nombres largos se parten en dos renglones por el espacio más cercano a la mitad.
+      let lines = [raw];
+      if (raw.length > 10 && raw.includes(' ')) {
+        const spaces = [...raw.matchAll(/ /g)].map((m) => m.index);
+        const cut = spaces.reduce((a, b) => (Math.abs(b - raw.length / 2) < Math.abs(a - raw.length / 2) ? b : a));
+        lines = [raw.slice(0, cut), raw.slice(cut + 1)];
+      }
+      const dates = [['★', fmtDate(PH.deceased.birth)], ['✝', fmtDate(PH.deceased.death)]].filter(([, d]) => d);
+      const longest = Math.max(...lines.map((l) => l.length));
+      const fs = Math.min(lines.length > 1 ? (dates.length ? 14 : 17) : (dates.length ? 18 : 20), 100 / (longest * 0.52));
+      const lh = fs * 1.08;
+      const dfs = 12, dlh = dfs * 1.2, gap = dates.length ? 3 : 0;
+      // Bloque de texto centrado verticalmente en la placa (y 86 → 150).
+      const total = lines.length * lh + gap + dates.length * dlh;
+      const top = 118 - total / 2;
+      const text = lines.map((l, i) => `<tspan x="55" y="${(top + i * lh + fs * 0.85).toFixed(1)}">${esc(l)}</tspan>`).join('');
+      const dTop = top + lines.length * lh + gap;
+      const dateText = dates.map(([sym, d], i) =>
+        `<text x="55" y="${(dTop + i * dlh + dfs * 0.9).toFixed(1)}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="${dfs}" fill="#7a2a12">${sym} ${d}</text>`).join('');
       return `
-        <rect class="o" x="3" y="3" width="64" height="72" rx="12" fill="${k.g('#ffe27a', '#d9801a')}"/>
-        <rect class="ot" x="8" y="8" width="54" height="62" rx="8" fill="${k.g('#c5601a', '#ffd24a')}"/>
-        <clipPath id="clipRet"><ellipse cx="35" cy="39" rx="21" ry="26"/></clipPath>
-        <g clip-path="url(#clipRet)">${portraitInner(k, 14, 13, 42, 52)}</g>
-        <ellipse class="ln" cx="35" cy="39" rx="21" ry="26"/>
-        ${bloom(k, 9, 12, 8, '#ffd23f', '#ff8a00', '#b84a00')}${bloom(k, 61, 12, 8, '#ffd23f', '#ff8a00', '#b84a00')}
-        ${bloom(k, 9, 68, 8, '#ff7ad1', '#d41f86', '#7a0a4b')}${bloom(k, 61, 68, 8, '#ff7ad1', '#d41f86', '#7a0a4b')}
-        <rect class="o" x="6" y="77" width="58" height="15" rx="5" fill="${k.g('#fff8dc', '#f6d58e')}"/>
-        <text x="35" y="${77 + 10.2}" text-anchor="middle" font-family="${FONT}" font-weight="700" font-style="italic" font-size="${fs}" fill="#5b1a5d">${name}</text>
-        ${sparkle(35, 4, 4, '#fff', 0.3)}`;
+        <rect class="o" x="18" y="3" width="74" height="80" rx="12" fill="${k.g('#ffe27a', '#d9801a')}"/>
+        <rect class="ot" x="22" y="7" width="66" height="72" rx="8" fill="${k.g('#c5601a', '#ffd24a')}"/>
+        <clipPath id="clipRet"><ellipse cx="55" cy="43" rx="29" ry="34"/></clipPath>
+        <g clip-path="url(#clipRet)">${portraitInner(k, 26, 9, 58, 68)}</g>
+        <ellipse class="ln" cx="55" cy="43" rx="29" ry="34"/>
+        ${bloom(k, 23, 10, 7, '#ffd23f', '#ff8a00', '#b84a00')}${bloom(k, 87, 10, 7, '#ffd23f', '#ff8a00', '#b84a00')}
+        ${bloom(k, 23, 76, 7, '#ff7ad1', '#d41f86', '#7a0a4b')}${bloom(k, 87, 76, 7, '#ff7ad1', '#d41f86', '#7a0a4b')}
+        <rect class="o" x="2" y="86" width="106" height="64" rx="8" fill="${k.g('#fff8dc', '#f6d58e')}"/>
+        <text text-anchor="middle" font-family="${FONT}" font-weight="700" font-style="italic" font-size="${fs.toFixed(1)}" fill="#5b1a5d">${text}</text>
+        ${dateText}
+        ${sparkle(55, 4, 4, '#fff', 0.3)}`;
     }),
 
     // Fotografía adicional del difunto (marco turquesa y moño negro).
     fotoDifunto: make('0 0 60 76', (k) => `
-      ${photoFrame(k, '#33e0d0', '#0b8f9a', portraitInner(k, 9, 9, 42, 56), 'clipFD')}
+      ${photoFrame(k, '#33e0d0', '#0b8f9a', portraitInner(k, 6, 6, 48, 62), 'clipFD')}
       <path class="o" d="M46 62 L58 72 L52 58Z M46 62 L52 74 L58 66Z" fill="#241333"/>
       <circle class="o" cx="50" cy="63" r="3" fill="#3b2352"/>`),
 
     // Fotografía grande del difunto: misma foto y datos que la fotografía normal,
     // con marco dorado y flores de cempasúchil (su tamaño se define en config.js).
     fotoGrande: make('0 0 60 76', (k) => `
-      ${photoFrame(k, '#ffd23f', '#d9801a', portraitInner(k, 9, 9, 42, 56), 'clipFG')}
+      ${photoFrame(k, '#ffd23f', '#d9801a', portraitInner(k, 6, 6, 48, 62), 'clipFG')}
       ${bloom(k, 6, 70, 7, '#ffd23f', '#ff8a00', '#b84a00')}${bloom(k, 54, 70, 7, '#ffb000', '#ff6a00', '#a23c00')}
       <path class="o" d="M46 62 L58 72 L52 58Z M46 62 L52 74 L58 66Z" fill="#241333"/>
       <circle class="o" cx="50" cy="63" r="3" fill="#3b2352"/>`),
 
     // Fotografía familiar (silueta de dos personas, marco rosa).
     fotoFamilia: make('0 0 60 76', (k) => photoFrame(k, '#ff6fb5', '#c2185b', `
-      <rect x="9" y="9" width="42" height="56" fill="${k.g('#ffe9a8', '#ffb86b')}"/>
+      <rect x="6" y="6" width="48" height="62" fill="${k.g('#ffe9a8', '#ffb86b')}"/>
       <g transform="translate(5 14) scale(.62)">${PH.person(k, '#2fb7a5', '#157a74')}</g>
       <g transform="translate(26 20) scale(.55)">${PH.person(k, '#8e44d6', '#512a94', '#e8b48a')}</g>`, 'clipFF')),
 
